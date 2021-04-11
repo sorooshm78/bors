@@ -1,5 +1,7 @@
 import re
+import time
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 
 def read_file(file_name, field):
 	file = open(file_name, "r")
@@ -22,3 +24,18 @@ captcha.send_keys(input("captcha:"))
 
 login_butten = driver.find_element_by_class_name("btn-enter")
 login_butten.click()
+
+time.sleep(5)
+
+#abort pop up box 
+if(len(driver.find_elements_by_class_name("popup-box")) != 0):
+	abort = driver.find_elements_by_class_name("close")[1]
+	abort.click()
+
+time.sleep(5)
+
+'''
+search = driver.find_elements_by_id("txt_search")
+print(len(search))
+search.send_keys("طلا")
+'''
