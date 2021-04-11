@@ -34,8 +34,12 @@ if(len(driver.find_elements_by_class_name("popup-box")) != 0):
 
 time.sleep(5)
 
-'''
+#search
 search = driver.find_elements_by_id("txt_search")
-print(len(search))
-search.send_keys("طلا")
-'''
+search[1].send_keys("طلا")
+#list_container = driver.find_elements_by_id("auto-list-container")
+time.sleep(5)
+
+list_drop_down = driver.find_elements_by_id("list_dropdown")[1]
+
+#list_drop_down.click()
