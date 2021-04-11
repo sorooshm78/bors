@@ -7,9 +7,8 @@ def read_file(file_name, field):
 	file.close()
 	return result
 
-url = "https://www.mofidonline.com/Account/Login"
 driver = webdriver.Firefox()
-driver.get(url)
+driver.get(read_file("info.txt", "url"))
 
 # login
 username = driver.find_element_by_id("username")
