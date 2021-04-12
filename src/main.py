@@ -1,7 +1,6 @@
 import re
 import time
 from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
 
 def read_file(file_name, field):
 	file = open(file_name, "r")
@@ -25,21 +24,23 @@ captcha.send_keys(input("captcha:"))
 login_butten = driver.find_element_by_class_name("btn-enter")
 login_butten.click()
 
-time.sleep(5)
-
-#abort pop up box 
+#abort popup box 
+time.sleep(2)
 if(len(driver.find_elements_by_class_name("popup-box")) != 0):
 	abort = driver.find_elements_by_class_name("close")[1]
 	abort.click()
 
-time.sleep(5)
-
 #search
-search = driver.find_elements_by_id("txt_search")
-search[1].send_keys("طلا")
-#list_container = driver.find_elements_by_id("auto-list-container")
-time.sleep(5)
+time.sleep(2)
+stock = read_file("info.txt", "stock")
+search = driver.find_elements_by_id("txt_search")[1]
+search.send_keys(stock)
+time.sleep(2)
+driver.find_elements_by_xpath("//div[contains(@isin, 'IR')]")[0].click()
 
-list_drop_down = driver.find_elements_by_id("list_dropdown")[1]
-
-#list_drop_down.click()
+#price
+time.sleep(2)
+hight_price = int(re.sub(',','', driver.find_element_by_id("dailyslider_Hight").text))
+low_price = int(re.sub(',','', driver.find_element_by_id("dailyslider_Low").text))
+print("hight price:" + str(hight_price))
+print("low price:" + str(low_price))
