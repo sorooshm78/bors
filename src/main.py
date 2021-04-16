@@ -80,15 +80,15 @@ for i in range(1, min+1):
 		if now_sell_price >= int(buy_price + (buy_price * wage)):
 			if now_sell_price < last_sell_price:
 				#update file
-				n_count = 0
-				n_buy_price = 0
-				n_last_buy_price = now_buy_price
-				n_last_sell_price = now_sell_price
-				n_money = money + int((now_sell_price * count) - (now_sell_price * count * wage))
-				write_file('stock.txt', n_count, n_buy_price, n_last_buy_price, n_last_sell_price, n_money)
+				write_file('stock.txt', 'count', 0)
+				write_file('stock.txt', 'buy_price', 0)
+				write_file('stock.txt', 'last_buy_price', now_buy_price)
+				write_file('stock.txt', 'last_sell_price', now_sell_price)
+				new_money = money + int((now_sell_price * count) - (now_sell_price * count * wage))
+				write_file('stock.txt', 'money', new_money)
 
 				print("sell count '{0}' , price '{1}'".format(count, now_sell_price))
-				log.write("Date:{0}		sell count {1} , price {2}, money {3}\n".format(datetime.datetime.now(), count, now_sell_price, n_money))
+				log.write("Date:{0}		sell count {1} , price {2}, money {3}\n".format(datetime.datetime.now(), count, now_sell_price, new_money))
 				continue
 				#sell()
 
@@ -97,23 +97,21 @@ for i in range(1, min+1):
 		if now_buy_price > last_buy_price:
 			
 			#update file
-			n_count = int(money/now_buy_price)
-			n_buy_price = now_buy_price
-			n_last_buy_price = now_buy_price
-			n_last_sell_price = now_sell_price
-			n_money = money - int((now_buy_price * n_count) + (now_buy_price * n_count * wage))
-			write_file('stock.txt', n_count, n_buy_price, n_last_buy_price, n_last_sell_price, n_money)
-
-			print("buy count '{0}' , price '{1}'".format(n_count, now_buy_price))
-			log.write("Date:{0}		buy count {1} , price {2}, money {3}\n".format(datetime.datetime.now(),n_count, now_sell_price, n_money))
+			new_count = int(money/now_buy_price)
+			write_file('stock.txt', 'count', new_count)
+			write_file('stock.txt', 'buy_price', now_buy_price)
+			write_file('stock.txt', 'last_sell_price', now_sell_price)
+			write_file('stock.txt', 'last_buy_price', now_buy_price)
+			new_money = money - int((now_buy_price * new_count) + (now_buy_price * new_count * wage))
+			write_file('stock.txt', 'money', new_money)
+		
+			print("buy count '{0}' , price '{1}'".format(new_count, now_buy_price))
+			log.write("Date:{0}		buy count {1} , price {2}, money {3}\n".format(datetime.datetime.now(),new_count, now_sell_price, new_money))
 			continue
+		
 			#buy()				
-
-	n_count = count
-	n_buy_price = read_file('stock.txt', 'buy_price')
-	n_last_buy_price = now_buy_price
-	n_last_sell_price = now_sell_price
-	n_money = money
-	write_file('stock.txt', n_count, n_buy_price, n_last_buy_price, n_last_sell_price, n_money)
+		
+	write_file('stock.txt', 'last_sell_price', now_sell_price)
+	write_file('stock.txt', 'last_buy_price', now_buy_price)
 
 	time.sleep(60)
