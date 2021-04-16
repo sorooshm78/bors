@@ -6,13 +6,13 @@ import datetime
 def convert_str_to_int(str):
 	return int(re.sub(',','', str))
 
-def write_file(file_name , count, price, last_buy_price, last_sell_price, money):
-	with open(file_name, 'w') as file:
-		file.write('count = %s\n' % count)
-		file.write('buy_price = %s\n' % price)
-		file.write('last_buy_price = %s\n' % last_buy_price)
-		file.write('last_sell_price = %s\n' % last_sell_price)
-		file.write('money = %s\n' % money)
+def write_file(file_name, field, value):
+    with open(file_name, 'r') as file:
+        data = file.read()
+    
+    with open(file_name, 'w') as file:
+        data = re.sub('%s.*=\s*.+' %field, '{0} = {1}'.format(field,value), data)
+        file.write(data)
 
 def read_file(file_name, field):
 	file = open(file_name, "r")
