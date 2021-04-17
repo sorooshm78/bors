@@ -114,4 +114,4 @@ for i in range(1, min+1):
 	write_file('stock.txt', 'last_sell_price', now_sell_price)
 	write_file('stock.txt', 'last_buy_price', now_buy_price)
 
-	time.sleep(60)
+	time.sleep(30)

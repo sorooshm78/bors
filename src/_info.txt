@@ -1,0 +1,6 @@
+url = https://online.emofid.com/login
+username = ****
+password = ****
+stock = ****
+min = 30
+wage = 0.005
