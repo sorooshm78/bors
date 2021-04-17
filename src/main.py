@@ -55,8 +55,8 @@ time.sleep(5)
 hight_price = convert_str_to_int(driver.find_element_by_id("dailyslider_Hight").text)
 low_price = convert_str_to_int(driver.find_element_by_id("dailyslider_Low").text)
 
-print("hight price:" + str(hight_price))
-print("low price:" + str(low_price))
+#print("hight price:" + str(hight_price))
+#print("low price:" + str(low_price))
 
 #Alogorithm
 min = int(read_file('info.txt', 'min'))

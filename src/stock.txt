@@ -1,5 +1,5 @@
-count = 0
-buy_price = 0
-last_buy_price = 0
-last_sell_price = 0
-money = 5000000
+count = 69
+buy_price = 72000
+last_buy_price = 72000
+last_sell_price = 72000
+money = 32000
