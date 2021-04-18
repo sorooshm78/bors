@@ -3,6 +3,17 @@ import time
 from selenium import webdriver
 import datetime
 
+def write_log(text):
+	with open('log.txt', 'a') as log:
+		log.write(text)
+
+def update_stock_file(count, buy_price, now_buy_price, now_sell_price, money):
+	write_file('stock.txt', 'count', count)
+	write_file('stock.txt', 'buy_price', buy_price)
+	write_file('stock.txt', 'last_buy_price', now_buy_price)
+	write_file('stock.txt', 'last_sell_price', now_sell_price)
+	write_file('stock.txt', 'money', money)
+
 def convert_str_to_int(str):
 	return int(re.sub(',','', str))
 
@@ -61,13 +72,12 @@ low_price = convert_str_to_int(driver.find_element_by_id("dailyslider_Low").text
 #Alogorithm
 min = int(read_file('info.txt', 'min'))
 wage = float(read_file('info.txt', 'wage'))
-log = open('log.txt', 'a')
 
 for i in range(1, min+1):
 	now_sell_price = convert_str_to_int(driver.find_element_by_xpath('//table/tbody/tr[1]/td[3]/span[2]').text)
 	now_buy_price = convert_str_to_int(driver.find_element_by_xpath('//table/tbody/tr[1]/td[4]/span[2]').text)
 
-	log.write('Date:{0}		sell price {1}, buy price {2}\n'.format(datetime.datetime.now(), now_sell_price, now_buy_price))
+	write_log('Date:{0}		price :   sell {1}, buy {2}\n'.format(datetime.datetime.now(), now_sell_price, now_buy_price))
 
 	count = int(read_file('stock.txt', 'count'))
 	last_sell_price = int(read_file('stock.txt', 'last_sell_price'))
@@ -80,15 +90,11 @@ for i in range(1, min+1):
 		if now_sell_price >= int(buy_price + (buy_price * wage)):
 			if now_sell_price < last_sell_price:
 				#update file
-				write_file('stock.txt', 'count', 0)
-				write_file('stock.txt', 'buy_price', 0)
-				write_file('stock.txt', 'last_buy_price', now_buy_price)
-				write_file('stock.txt', 'last_sell_price', now_sell_price)
 				new_money = money + int((now_sell_price * count) - (now_sell_price * count * wage))
-				write_file('stock.txt', 'money', new_money)
+				update_stock_file(0, 0, now_buy_price, now_sell_price, new_money)			
 
 				print("sell count '{0}' , price '{1}'".format(count, now_sell_price))
-				log.write("Date:{0}		sell count {1} , price {2}, money {3}\n".format(datetime.datetime.now(), count, now_sell_price, new_money))
+				write_log("Date:{0}		sell count {1} , price {2}, money {3}\n".format(datetime.datetime.now(), count, now_sell_price, new_money))
 				continue
 				#sell()
 
@@ -98,15 +104,11 @@ for i in range(1, min+1):
 			
 			#update file
 			new_count = int(money/now_buy_price)
-			write_file('stock.txt', 'count', new_count)
-			write_file('stock.txt', 'buy_price', now_buy_price)
-			write_file('stock.txt', 'last_sell_price', now_sell_price)
-			write_file('stock.txt', 'last_buy_price', now_buy_price)
 			new_money = money - int((now_buy_price * new_count) + (now_buy_price * new_count * wage))
-			write_file('stock.txt', 'money', new_money)
-		
+			update_stock_file(new_count, now_buy_price , now_buy_price, now_sell_price, new_money)			
+
 			print("buy count '{0}' , price '{1}'".format(new_count, now_buy_price))
-			log.write("Date:{0}		buy count {1} , price {2}, money {3}\n".format(datetime.datetime.now(),new_count, now_sell_price, new_money))
+			write_log("Date:{0}		buy count {1} , price {2}, money {3}\n".format(datetime.datetime.now(),new_count, now_sell_price, new_money))
 			continue
 		
 			#buy()				
