@@ -31,6 +31,38 @@ def read_file(file_name, field):
 	file.close()
 	return result
 
+def enter_count_input(count):
+	input_count = driver.find_element_by_id("send_order_txtCount")
+	input_count.send_keys(count)
+
+def enter_price_input(price):
+	input_price = driver.find_element_by_id("send_order_txtPrice")
+	input_price.send_keys(price)
+
+def confirmtion():
+	sell_btn =  driver.find_element_by_id("send_order_btnSendOrder")
+	sell_btn.click()
+
+	confirmـbtn = driver.find_element_by_id("sendorder_ModalConfirm_btnSendOrder")
+	confirmـbtn.click()
+
+def sell(count, price):
+	sell_submit = driver.find_element_by_xpath("//div[2]/send-order/div/div[1]/div[2]/div")
+	sell_submit.click()
+
+	enter_count_input(count)
+	enter_price_input(price)
+	
+	confirmtion()
+	
+def buy(count, price):
+	buy_submit = driver.find_element_by_xpath("//div[2]/send-order/div/div[1]/div[1]/div")
+	buy_submit.click()
+	
+	enter_count_input(count)
+	enter_price_input(price)
+	confirmtion()
+
 driver = webdriver.Firefox()
 driver.get(read_file("info.txt", "url"))
 
@@ -95,13 +127,12 @@ for i in range(1, min+1):
 
 				print("sell count '{0}' , price '{1}'".format(count, now_sell_price))
 				write_log("Date:{0}		sell count {1} , price {2}, money {3}\n".format(datetime.datetime.now(), count, now_sell_price, new_money))
+				#sell(count, now_sell_price)
 				continue
-				#sell()
 
 	#BUY
 	if count == 0:
-		if now_buy_price > last_buy_price:
-			
+		if now_buy_price > last_buy_price:	
 			#update file
 			new_count = int(money/now_buy_price)
 			new_money = money - int((now_buy_price * new_count) + (now_buy_price * new_count * wage))
@@ -109,9 +140,8 @@ for i in range(1, min+1):
 
 			print("buy count '{0}' , price '{1}'".format(new_count, now_buy_price))
 			write_log("Date:{0}		buy count {1} , price {2}, money {3}\n".format(datetime.datetime.now(),new_count, now_sell_price, new_money))
+			#buy(new_count, now_buy_price)				
 			continue
-		
-			#buy()				
 		
 	write_file('stock.txt', 'last_sell_price', now_sell_price)
 	write_file('stock.txt', 'last_buy_price', now_buy_price)
